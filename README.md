@@ -4,6 +4,29 @@
 
 This project is an open-source Spring Boot server that dynamically generates a GraphQL API and an SQLite database from an uploaded GraphQL schema. It allows you to upload a `.graphql` spec, automatically creates the corresponding database tables, and exposes a `/graphql` endpoint for queries and mutations.
 
+## High-Level Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant REST_API as REST API (/api/upload-graphql-spec)
+    participant SchemaService
+    participant SchemaRegistry
+    participant SQLiteDB as SQLite DB
+    participant GraphQL_API as GraphQL API (/graphql)
+
+    User->>REST_API: Upload GraphQL schema
+    REST_API->>SchemaService: processSchemaFile(schemaFile)
+    SchemaService->>SQLiteDB: Create tables from schema
+    REST_API->>SchemaRegistry: setSchemaFile(schemaFile)
+    REST_API-->>User: Success response
+
+    User->>GraphQL_API: Query/Mutation request
+    GraphQL_API->>SchemaRegistry: getSchemaFile()
+    GraphQL_API->>SQLiteDB: Execute SQL (via resolvers)
+    GraphQL_API-->>User: Query/Mutation result
+```
+
 ## Features
 - Upload a GraphQL schema and auto-generate SQLite tables
 - Dynamic GraphQL endpoint based on uploaded schema
@@ -20,8 +43,8 @@ This project is an open-source Spring Boot server that dynamically generates a G
 ### Setup
 1. Clone the repository:
    ```bash
-   git clone <your-repo-url>
-   cd graphql-server
+   git clone https://github.com/digitalapicraft/graphql-sqlite-server.git
+   cd graphql-sqlite-server
    ```
 2. Build the project:
    ```bash
@@ -53,6 +76,27 @@ Run all tests and generate a code coverage report:
 ./mvnw test
 ```
 The coverage report will be available in `target/site/jacoco/index.html`.
+
+## How to Contribute
+
+We welcome contributions from the community! To help us review and merge your changes efficiently, please follow these guidelines:
+
+### 1. Fork and Branch
+- Fork the repository and create a new branch for your feature or bugfix.
+
+### 2. Create a Pull Request (PR)
+- Push your branch to your fork and open a [Pull Request](https://github.com/digitalapicraft/graphql-sqlite-server/pulls) against the `main` branch.
+- Clearly describe your changes and reference any related issues or discussions.
+
+### 3. Add Discussion Notes
+- If your PR introduces a significant change, please start a [Discussion](https://github.com/digitalapicraft/graphql-sqlite-server/discussions) and link it in your PR description.
+- For questions, ideas, or proposals, use the [Discussions](https://github.com/digitalapicraft/graphql-sqlite-server/discussions) tab.
+
+### 4. General Guidelines
+- Ensure your code passes all tests (`./mvnw test`) and follows the project's style.
+- Add or update documentation as needed.
+- Keep PRs focused and minimal—one feature or fix per PR is preferred.
+- Be respectful and constructive in all communications.
 
 ## Contributing
 Contributions are welcome! Please open issues or pull requests for improvements or bug fixes.

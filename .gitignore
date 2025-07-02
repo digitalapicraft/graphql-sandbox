@@ -1,0 +1,47 @@
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+
+# Test and coverage
+/test-uploads/
+/test-database.db
+jacoco.exec
+coverage/
+target/site/jacoco/
+
+# Uploaded schemas
+uploaded-schemas/
+
+# Ignore generated database
+*.db
+
+# Ignore build output
+/build/
+
+# Ignore temp files
+*.tmp
+*.swp 
