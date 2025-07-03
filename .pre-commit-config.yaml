@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: maven-checkstyle
+        name: Run Maven Checkstyle
+        entry: ./mvnw checkstyle:check
+        language: system
+        pass_filenames: false 
