@@ -1,4 +1,4 @@
-# Spring Boot Dynamic GraphQL Server
+# GraphQL Sandbox
 
 **Project managed by Digital API Corp**
 
@@ -43,8 +43,8 @@ sequenceDiagram
 ### Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/digitalapicraft/graphql-sqlite-server.git
-   cd graphql-sqlite-server
+   git clone https://github.com/digitalapicraft/graphql-sandbox.git
+   cd graphql-sandbox
    ```
 2. Build the project:
    ```bash
@@ -85,12 +85,12 @@ We welcome contributions from the community! To help us review and merge your ch
 - Fork the repository and create a new branch for your feature or bugfix.
 
 ### 2. Create a Pull Request (PR)
-- Push your branch to your fork and open a [Pull Request](https://github.com/digitalapicraft/graphql-sqlite-server/pulls) against the `main` branch.
+- Push your branch to your fork and open a [Pull Request](https://github.com/digitalapicraft/graphql-sandbox/pulls) against the `main` branch.
 - Clearly describe your changes and reference any related issues or discussions.
 
 ### 3. Add Discussion Notes
-- If your PR introduces a significant change, please start a [Discussion](https://github.com/digitalapicraft/graphql-sqlite-server/discussions) and link it in your PR description.
-- For questions, ideas, or proposals, use the [Discussions](https://github.com/digitalapicraft/graphql-sqlite-server/discussions) tab.
+- If your PR introduces a significant change, please start a [Discussion](https://github.com/digitalapicraft/graphql-sandbox/discussions) and link it in your PR description.
+- For questions, ideas, or proposals, use the [Discussions](https://github.com/digitalapicraft/graphql-sandbox/discussions) tab.
 
 ### 4. General Guidelines
 - Ensure your code passes all tests (`./mvnw test`) and follows the project's style.

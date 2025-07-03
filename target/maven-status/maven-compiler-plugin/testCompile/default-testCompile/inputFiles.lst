@@ -1,5 +1,5 @@
-/Users/rajanishgj/work/graphql-server/src/test/java/com/example/graphql/controller/SpecUploadControllerTest.java
-/Users/rajanishgj/work/graphql-server/src/test/java/com/example/graphql/service/SchemaServiceTest.java
-/Users/rajanishgj/work/graphql-server/src/test/java/com/example/graphql/service/SchemaRegistryTest.java
-/Users/rajanishgj/work/graphql-server/src/test/java/com/example/graphql/controller/GraphQLControllerTest.java
-/Users/rajanishgj/work/graphql-server/src/test/java/com/example/graphql/GraphqlServerApplicationTests.java
+/Users/rajanishgj/work/graphql-sandbox/src/test/java/com/example/graphql/controller/SpecUploadControllerTest.java
+/Users/rajanishgj/work/graphql-sandbox/src/test/java/com/example/graphql/service/SchemaRegistryTest.java
+/Users/rajanishgj/work/graphql-sandbox/src/test/java/com/example/graphql/GraphqlServerApplicationTests.java
+/Users/rajanishgj/work/graphql-sandbox/src/test/java/com/example/graphql/service/SchemaServiceTest.java
+/Users/rajanishgj/work/graphql-sandbox/src/test/java/com/example/graphql/controller/GraphQLControllerTest.java
