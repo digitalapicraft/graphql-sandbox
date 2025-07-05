@@ -55,4 +55,32 @@ public class SchemaService {
             default: return "TEXT";
         }
     }
+
+    // --- Schema Parsing Helpers for Dynamic GraphQL ---
+    public List<ObjectTypeDefinition> getObjectTypes(File schemaFile) throws IOException {
+        String schema = Files.readString(schemaFile.toPath());
+        Parser parser = new Parser();
+        Document document = parser.parseDocument(schema);
+        return document.getDefinitionsOfType(ObjectTypeDefinition.class).stream()
+                .filter(type -> !type.getName().equals("Query") && !type.getName().equals("Mutation"))
+                .collect(Collectors.toList());
+    }
+
+    public ObjectTypeDefinition getQueryType(File schemaFile) throws IOException {
+        String schema = Files.readString(schemaFile.toPath());
+        Parser parser = new Parser();
+        Document document = parser.parseDocument(schema);
+        return document.getDefinitionsOfType(ObjectTypeDefinition.class).stream()
+                .filter(type -> type.getName().equals("Query"))
+                .findFirst().orElse(null);
+    }
+
+    public ObjectTypeDefinition getMutationType(File schemaFile) throws IOException {
+        String schema = Files.readString(schemaFile.toPath());
+        Parser parser = new Parser();
+        Document document = parser.parseDocument(schema);
+        return document.getDefinitionsOfType(ObjectTypeDefinition.class).stream()
+                .filter(type -> type.getName().equals("Mutation"))
+                .findFirst().orElse(null);
+    }
 } 
