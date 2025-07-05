@@ -1,47 +1,67 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
 # Maven
 /target/
 !.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
 
 # Eclipse
 .classpath
 .project
 .settings/
 
-# IntelliJ
-.idea/
+# IDEA
 *.iml
-*.iws
+.idea/
 out/
 
 # VS Code
 .vscode/
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-
-# Environment
-.env
-
-# Test and coverage
-/test-uploads/
-/test-database.db
-jacoco.exec
-coverage/
-target/site/jacoco/
-
-# Uploaded schemas
-uploaded-schemas/
-
-# Ignore generated database
+# SQLite database
 *.db
+*.sqlite
 
-# Ignore build output
-/build/
+# Uploaded/test schema and data
+uploaded-schemas/
+test-uploads/
 
-# Ignore temp files
+# Test temp files
 *.tmp
-*.swp 
+*.temp
+
+# Jacoco coverage
+jacoco.exec
+
+# Ignore user-specific files
+*.swp
+*.swo 
