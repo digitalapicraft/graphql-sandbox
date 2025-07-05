@@ -26,7 +26,8 @@ public class SpecUploadController {
 
     @PostMapping("/upload-graphql-spec")
     public ResponseEntity<String> uploadGraphqlSpec(@RequestParam("file") MultipartFile file) throws IOException {
-        File dir = new File(uploadDir);
+        String basePath = System.getProperty("user.dir");
+        File dir = new File(basePath, uploadDir);
         if (!dir.exists()) dir.mkdirs();
         File dest = new File(dir, file.getOriginalFilename());
         file.transferTo(dest);
