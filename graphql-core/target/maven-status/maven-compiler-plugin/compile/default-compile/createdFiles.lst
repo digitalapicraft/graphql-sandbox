@@ -1,0 +1,6 @@
+com/example/graphql/core/service/SchemaService.class
+com/example/graphql/core/controller/GraphQLController.class
+com/example/graphql/core/adapter/DatabaseAdapter.class
+com/example/graphql/core/controller/SpecUploadController.class
+com/example/graphql/core/adapter/ConnectionProvider.class
+com/example/graphql/core/service/SchemaRegistry.class
