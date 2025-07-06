@@ -47,3 +47,18 @@ uploaded-schemas/
 # Ignore temp files
 *.tmp
 *.swp
+
+# Maven build output
+**/target/
+
+target/
+
+# IDE files
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+
+# Logs
+*.log

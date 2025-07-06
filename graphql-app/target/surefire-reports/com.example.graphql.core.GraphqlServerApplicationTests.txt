@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.graphql.core.GraphqlServerApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.673 s -- in com.example.graphql.core.GraphqlServerApplicationTests

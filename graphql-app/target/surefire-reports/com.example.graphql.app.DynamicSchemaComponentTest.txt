@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.graphql.app.DynamicSchemaComponentTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.354 s -- in com.example.graphql.app.DynamicSchemaComponentTest
