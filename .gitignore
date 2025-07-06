@@ -1,6 +1,8 @@
 # Maven
 /target/
 !.mvn/wrapper/maven-wrapper.jar
+./local-test
+./local-test/*
 
 # Eclipse
 .classpath

@@ -28,10 +28,12 @@ sequenceDiagram
 ```
 
 ## Features
-- Upload a GraphQL schema and auto-generate SQLite tables
+- Upload a GraphQL schema and auto-generate database tables
 - Dynamic GraphQL endpoint based on uploaded schema
 - Query and mutate data via GraphQL
 - REST API for schema upload
+- Multi-module architecture with database adapters
+- Support for SQLite and PostgreSQL databases
 - Code coverage and CI via GitHub Actions
 
 ## Getting Started
@@ -39,6 +41,18 @@ sequenceDiagram
 ### Prerequisites
 - Java 17+
 - Maven
+
+### Project Structure
+The project is organized as a multi-module Maven project:
+- `graphql-core` - Core GraphQL functionality and business logic
+- `sqlite-adapter` - SQLite database adapter implementation
+- `postgres-adapter` - PostgreSQL database adapter implementation  
+- `graphql-app` - Executable Spring Boot application
+
+### Database Configuration
+The application supports multiple database backends:
+- **SQLite** (default): File-based database, no setup required
+- **PostgreSQL**: Requires a running PostgreSQL instance
 
 ### Setup
 1. Clone the repository:
@@ -52,7 +66,13 @@ sequenceDiagram
    ```
 3. Run the server:
    ```bash
-   ./mvnw spring-boot:run
+   # Option 1: Using the run.sh script (recommended)
+   ./run.sh                    # Run with SQLite profile on port 8080
+   ./run.sh postgres          # Run with PostgreSQL profile on port 8080
+   ./run.sh sqlite 8081       # Run with SQLite profile on port 8081
+   
+   # Option 2: Using Maven directly
+   ./mvnw spring-boot:run -pl graphql-app
    ```
 
 ### Usage
@@ -104,4 +124,33 @@ Contributions are welcome! Please open issues or pull requests for improvements 
 _This project is managed and maintained by **Digital API Corp**._
 
 ## License
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details. 
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Packaging and Running the Application
+
+To build and run the application as a standalone JAR, use the provided script:
+
+```bash
+./package-and-run.sh [profile] [extra-args...]
+```
+- `profile` (optional): The Spring profile to use (`sqlite` by default, or `postgres` for PostgreSQL)
+- `extra-args...` (optional): Any additional arguments to pass to the Spring Boot application (e.g., `--server.port=8081`)
+
+**Examples:**
+
+- Run with SQLite (default):
+  ```bash
+  ./package-and-run.sh
+  ```
+- Run with PostgreSQL:
+  ```bash
+  ./package-and-run.sh postgres
+  ```
+- Run with SQLite on a custom port:
+  ```bash
+  ./package-and-run.sh sqlite --server.port=8081
+  ```
+
+The script will:
+1. Build the latest JAR for `graphql-app` (and dependencies)
+2. Run it with your chosen profile and arguments 
