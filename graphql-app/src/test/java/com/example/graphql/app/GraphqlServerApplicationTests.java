@@ -1,4 +1,4 @@
-package com.example.graphql.core;
+package com.example.graphql.app;
 
 import com.example.graphql.app.GraphqlServerApplication;
 import org.junit.jupiter.api.Test;
