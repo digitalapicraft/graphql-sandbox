@@ -154,3 +154,52 @@ To build and run the application as a standalone JAR, use the provided script:
 The script will:
 1. Build the latest JAR for `graphql-app` (and dependencies)
 2. Run it with your chosen profile and arguments 
+
+## Running with Docker Compose
+
+You can run the entire stack (GraphQL server + PostgreSQL) using Docker Compose. This is the easiest way to get started with a production-like environment.
+
+### 1. Create a `.env` file
+
+Create a `.env` file in the project root with the following content (edit values as needed):
+
+```
+POSTGRES_USER=graphql
+POSTGRES_PASSWORD=graphqlpass
+POSTGRES_DB=graphql_db
+SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/graphql_db
+SPRING_DATASOURCE_USERNAME=graphql
+SPRING_DATASOURCE_PASSWORD=graphqlpass
+SPRING_PROFILES_ACTIVE=postgres
+```
+
+### 2. Build the application JAR
+
+Before running Docker Compose, build the application JAR:
+
+```bash
+./mvnw clean package -DskipTests
+```
+
+### 3. Start the stack
+
+```bash
+docker compose up --build
+```
+
+- The GraphQL server will be available at [http://localhost:8080](http://localhost:8080)
+- PostgreSQL will be available at `localhost:5432` (for tools/clients)
+
+### 4. Stopping the stack
+
+To stop and remove containers, networks, and volumes:
+
+```bash
+docker-compose down -v
+```
+
+### 5. Notes
+- The application will start with the `postgres` profile by default (see `Dockerfile`).
+- You can modify the `.env` file to change database credentials or ports as needed.
+- The database data is persisted in a Docker volume (`pgdata`).
+- For schema upload and GraphQL queries, use the same endpoints as described above. 
