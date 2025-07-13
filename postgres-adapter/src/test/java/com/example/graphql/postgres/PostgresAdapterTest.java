@@ -6,11 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import javax.sql.DataSource;
+import org.mockito.Mockito;
 
 class PostgresAdapterTest {
     private PostgresAdapter adapter;
@@ -93,5 +96,51 @@ class PostgresAdapterTest {
         adapter.createTable("TestTable", "id INTEGER PRIMARY KEY, name TEXT");
         int updated = adapter.executeUpdate("UPDATE TestTable SET name = ? WHERE id = ?", "Charlie", 999);
         assertEquals(0, updated);
+    }
+
+    @Test
+    void testDefaultConstructorClosesConnection() throws Exception {
+        Connection mockConn = Mockito.mock(Connection.class);
+        Statement mockStmt = Mockito.mock(Statement.class);
+        Mockito.when(mockConn.createStatement()).thenReturn(mockStmt);
+        Mockito.when(mockStmt.execute(Mockito.anyString())).thenReturn(true);
+
+        PostgresAdapter adapter = new PostgresAdapter(() -> mockConn);
+        java.lang.reflect.Field field = PostgresAdapter.class.getDeclaredField("closeConnections");
+        field.setAccessible(true);
+        field.set(adapter, true);
+
+        adapter.createTable("TestTable", "id INTEGER PRIMARY KEY");
+        Mockito.verify(mockConn, Mockito.atLeastOnce()).close();
+    }
+
+    @Test
+    void testDataSourceConstructorClosesConnection() throws Exception {
+        DataSource mockDs = Mockito.mock(DataSource.class);
+        Connection mockConn = Mockito.mock(Connection.class);
+        Statement mockStmt = Mockito.mock(Statement.class);
+        Mockito.when(mockConn.createStatement()).thenReturn(mockStmt);
+        Mockito.when(mockStmt.execute(Mockito.anyString())).thenReturn(true);
+        Mockito.when(mockDs.getConnection()).thenReturn(mockConn);
+        PostgresAdapter adapter = new PostgresAdapter(mockDs);
+        adapter.createTable("TestTable", "id INTEGER PRIMARY KEY");
+        Mockito.verify(mockConn, Mockito.atLeastOnce()).close();
+    }
+
+    @Test
+    void testDefaultConstructorBasicOperation() throws Exception {
+        PostgresAdapter adapter = new PostgresAdapter();
+        java.lang.reflect.Field urlField = PostgresAdapter.class.getDeclaredField("dbUrl");
+        urlField.setAccessible(true);
+        urlField.set(adapter, "jdbc:h2:mem:" + UUID.randomUUID() + ";MODE=PostgreSQL;DB_CLOSE_DELAY=-1");
+        java.lang.reflect.Field userField = PostgresAdapter.class.getDeclaredField("dbUser");
+        userField.setAccessible(true);
+        userField.set(adapter, "sa");
+        java.lang.reflect.Field passField = PostgresAdapter.class.getDeclaredField("dbPassword");
+        passField.setAccessible(true);
+        passField.set(adapter, "");
+        adapter.createTable("TestTable", "id INTEGER PRIMARY KEY, name TEXT");
+        int inserted = adapter.executeUpdate("INSERT INTO TestTable (id, name) VALUES (?, ?)", 1, "Test");
+        assertEquals(1, inserted);
     }
 } 
