@@ -48,4 +48,28 @@ class SchemaServiceTest {
         
         assertTrue(createTableCalled, "createTable method should have been called");
     }
+
+    @Test
+    void testGetObjectTypes() throws Exception {
+        String schema = "type Book { id: ID! title: String! author: String! }\ntype Query { books: [Book] }";
+        File file = new File("test-schema.graphql");
+        try (FileWriter fw = new FileWriter(file)) { fw.write(schema); }
+        assertEquals(1, schemaService.getObjectTypes(file).size());
+    }
+
+    @Test
+    void testGetQueryType() throws Exception {
+        String schema = "type Book { id: ID! title: String! author: String! }\ntype Query { books: [Book] }";
+        File file = new File("test-schema.graphql");
+        try (FileWriter fw = new FileWriter(file)) { fw.write(schema); }
+        assertNotNull(schemaService.getQueryType(file));
+    }
+
+    @Test
+    void testGetMutationType() throws Exception {
+        String schema = "type Book { id: ID! title: String! author: String! }\ntype Mutation { addBook(id: ID!, title: String!, author: String!): Book }";
+        File file = new File("test-schema.graphql");
+        try (FileWriter fw = new FileWriter(file)) { fw.write(schema); }
+        assertNotNull(schemaService.getMutationType(file));
+    }
 } 

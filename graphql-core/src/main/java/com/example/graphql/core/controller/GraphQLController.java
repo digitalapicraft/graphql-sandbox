@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileReader;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import graphql.language.Type;
 import graphql.language.TypeName;
@@ -123,7 +120,7 @@ public class GraphQLController {
                     System.out.println("[GraphQL] SQL: " + sql + ", idVal: " + idVal);
                     return databaseAdapter.executeQuerySingle(sql, idVal);
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 System.err.println("[GraphQL] SQL Error: " + e.getMessage());
                 throw new RuntimeException("SQL error querying table '" + tableName + "': " + e.getMessage());
             }
@@ -184,7 +181,7 @@ public class GraphQLController {
                     databaseAdapter.executeUpdate(sql, idVal);
                     return Map.of(idArg, idVal);
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 System.err.println("[GraphQL] SQL Error: " + e.getMessage());
                 throw new RuntimeException("SQL error in mutation '" + fieldName + "': " + e.getMessage());
             }

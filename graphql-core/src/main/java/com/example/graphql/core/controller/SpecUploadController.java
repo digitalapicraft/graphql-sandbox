@@ -3,10 +3,10 @@ package com.example.graphql.core.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Value;
 import com.example.graphql.core.service.SchemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.graphql.core.service.SchemaRegistry;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @RequestMapping("/api")
 public class SpecUploadController {
 
-    @Value("${graphql.schema.upload-dir:src/main/resources/schema}")
+    @Value("${graphql.schema.upload-dir:uploaded-schemas}")
     private String uploadDir;
 
     @Autowired

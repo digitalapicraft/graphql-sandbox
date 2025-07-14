@@ -2,7 +2,6 @@ package com.example.graphql.core.service;
 
 import graphql.language.Document;
 import graphql.language.ObjectTypeDefinition;
-import graphql.language.TypeDefinition;
 import graphql.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
