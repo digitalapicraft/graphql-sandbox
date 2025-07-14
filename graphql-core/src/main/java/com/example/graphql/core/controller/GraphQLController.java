@@ -42,17 +42,20 @@ public class GraphQLController {
     @Autowired
     private DatabaseAdapter databaseAdapter;
 
-    private GraphQL graphQL;
-    private File lastSchemaFile;
+    // Cache GraphQL instances per specName
+    private final Map<String, GraphQL> graphQLMap = new HashMap<>();
+    private final Map<String, File> lastSchemaFileMap = new HashMap<>();
 
-    @PostMapping
-    public ResponseEntity<?> execute(@RequestBody Map<String, Object> request) {
-        if (!schemaRegistry.hasSchema()) {
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                    .body("GraphQL schema not uploaded. Please upload a schema first.");
+    @PostMapping("/{specName}")
+    public ResponseEntity<?> execute(@PathVariable String specName, @RequestBody Map<String, Object> request) {
+        if (!schemaRegistry.hasSchema(specName)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("GraphQL schema not found for spec: " + specName);
         }
-        File schemaFile = schemaRegistry.getSchemaFile();
+        File schemaFile = schemaRegistry.getSchemaFile(specName);
         try {
+            GraphQL graphQL = graphQLMap.get(specName);
+            File lastSchemaFile = lastSchemaFileMap.get(specName);
             if (graphQL == null || !schemaFile.equals(lastSchemaFile)) {
                 // (Re)build GraphQL instance if schema changed
                 SchemaParser parser = new SchemaParser();
@@ -60,7 +63,8 @@ public class GraphQLController {
                 RuntimeWiring wiring = buildDynamicWiring(schemaFile);
                 SchemaGenerator generator = new SchemaGenerator();
                 graphQL = GraphQL.newGraphQL(generator.makeExecutableSchema(typeRegistry, wiring)).build();
-                lastSchemaFile = schemaFile;
+                graphQLMap.put(specName, graphQL);
+                lastSchemaFileMap.put(specName, schemaFile);
             }
             String query = (String) request.get("query");
             Map<String, Object> variables = (Map<String, Object>) request.getOrDefault("variables", null);

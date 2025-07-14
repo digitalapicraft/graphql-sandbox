@@ -29,11 +29,12 @@ Thumbs.db
 .env
 
 # Test and coverage
-/test-uploads/
+*/test-uploads/*
 /test-database.db
 jacoco.exec
 coverage/
 target/site/jacoco/
+graphql-app/src/main/resources/schema/*
 
 # Uploaded schemas
 uploaded-schemas/

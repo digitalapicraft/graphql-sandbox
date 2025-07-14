@@ -44,7 +44,7 @@ class DynamicSchemaComponentTest {
         );
 
         // Upload the schema
-        mockMvc.perform(multipart("/api/upload-graphql-spec")
+        mockMvc.perform(multipart("/api/upload-graphql-spec/cat")
                 .file(schemaFile))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Schema uploaded and database generated successfully")));
@@ -60,7 +60,7 @@ class DynamicSchemaComponentTest {
             }
             """;
 
-        mockMvc.perform(post("/graphql")
+        mockMvc.perform(post("/graphql/cat")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"query\":\"" + query.replace("\n", "\\n") + "\"}"))
                 .andExpect(status().isOk())

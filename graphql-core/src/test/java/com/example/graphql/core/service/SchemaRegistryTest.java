@@ -9,20 +9,20 @@ class SchemaRegistryTest {
     void testSetAndGetSchemaFile() {
         SchemaRegistry registry = new SchemaRegistry();
         File file = new File("test.graphql");
-        registry.setSchemaFile(file);
-        assertEquals(file, registry.getSchemaFile());
+        registry.setSchemaFile("testspec", file);
+        assertEquals(file, registry.getSchemaFile("testspec"));
     }
 
     @Test
     void testHasSchema() {
         SchemaRegistry registry = new SchemaRegistry();
-        assertFalse(registry.hasSchema());
+        assertFalse(registry.hasSchema("testspec"));
         File file = new File("test.graphql");
-        registry.setSchemaFile(file);
-        assertFalse(registry.hasSchema()); // file does not exist
+        registry.setSchemaFile("testspec", file);
+        assertFalse(registry.hasSchema("testspec")); // file does not exist
         try {
             file.createNewFile();
-            assertTrue(registry.hasSchema());
+            assertTrue(registry.hasSchema("testspec"));
         } catch (Exception e) {
             // ignore
         } finally {

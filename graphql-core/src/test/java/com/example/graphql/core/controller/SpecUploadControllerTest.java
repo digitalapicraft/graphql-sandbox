@@ -53,7 +53,7 @@ class SpecUploadControllerTest {
     @Test
     void uploadGraphqlSpec_success() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "schema.graphql", MediaType.TEXT_PLAIN_VALUE, "type Query { hello: String }".getBytes());
-        mockMvc.perform(multipart("/api/upload-graphql-spec").file(file))
+        mockMvc.perform(multipart("/api/upload-graphql-spec/testspec").file(file))
                 .andExpect(status().isOk());
     }
 
@@ -61,7 +61,7 @@ class SpecUploadControllerTest {
     void uploadGraphqlSpec_failure() throws Exception {
         doThrow(new RuntimeException("fail")).when(schemaService).processSchemaFile(any(File.class));
         MockMultipartFile file = new MockMultipartFile("file", "schema.graphql", MediaType.TEXT_PLAIN_VALUE, "type Query { hello: String }".getBytes());
-        mockMvc.perform(multipart("/api/upload-graphql-spec").file(file))
+        mockMvc.perform(multipart("/api/upload-graphql-spec/testspec").file(file))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Schema upload failed")));
     }

@@ -24,17 +24,17 @@ public class SpecUploadController {
     @Autowired
     private SchemaRegistry schemaRegistry;
 
-    @PostMapping("/upload-graphql-spec")
-    public ResponseEntity<String> uploadGraphqlSpec(@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/upload-graphql-spec/{specName}")
+    public ResponseEntity<String> uploadGraphqlSpec(@PathVariable String specName, @RequestParam("file") MultipartFile file) throws IOException {
         String basePath = System.getProperty("user.dir");
         File dir = new File(basePath, uploadDir);
         if (!dir.exists()) dir.mkdirs();
-        File dest = new File(dir, file.getOriginalFilename());
+        File dest = new File(dir, specName + ".graphql");
         file.transferTo(dest);
         // Process schema and generate DB
         try {
             schemaService.processSchemaFile(dest);
-            schemaRegistry.setSchemaFile(dest);
+            schemaRegistry.setSchemaFile(specName, dest);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Schema upload failed: " + e.getMessage());
         }

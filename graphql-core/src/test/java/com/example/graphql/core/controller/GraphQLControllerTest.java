@@ -41,21 +41,21 @@ class GraphQLControllerTest {
     }
 
     @Test
-    void returns503WhenNoSchema() {
-        when(schemaRegistry.hasSchema()).thenReturn(false);
+    void returns404WhenNoSchema() {
+        when(schemaRegistry.hasSchema("testspec")).thenReturn(false);
         Map<String, Object> req = new HashMap<>();
         req.put("query", "{ books { id } }");
-        ResponseEntity<?> resp = controller.execute(req);
-        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, resp.getStatusCode());
+        ResponseEntity<?> resp = controller.execute("testspec", req);
+        assertEquals(HttpStatus.NOT_FOUND, resp.getStatusCode());
     }
 
     @Test
     void returnsErrorOnException() {
-        when(schemaRegistry.hasSchema()).thenReturn(true);
-        when(schemaRegistry.getSchemaFile()).thenReturn(new File("/notfound.graphql"));
+        when(schemaRegistry.hasSchema("testspec")).thenReturn(true);
+        when(schemaRegistry.getSchemaFile("testspec")).thenReturn(new File("/notfound.graphql"));
         Map<String, Object> req = new HashMap<>();
         req.put("query", "{ books { id } }");
-        ResponseEntity<?> resp = controller.execute(req);
+        ResponseEntity<?> resp = controller.execute("testspec", req);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
     }
 
