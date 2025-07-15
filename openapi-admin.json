@@ -101,6 +101,56 @@
           }
         }
       }
+    },
+    "/api/graphql-specs": {
+      "get": {
+        "tags": [
+          "spec-upload-controller"
+        ],
+        "operationId": "listRegisteredSpecs",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/graphql-specs/{specName}": {
+      "get": {
+        "tags": [
+          "spec-upload-controller"
+        ],
+        "operationId": "getSpecFile",
+        "parameters": [
+          {
+            "name": "specName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {}

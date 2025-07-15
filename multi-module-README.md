@@ -11,8 +11,8 @@
 
 - **graphql-core**  
   - Contains all core logic, controllers, services, and the new `DatabaseAdapter` interface.
-  - All code is now under `com.example.graphql.core`.
-  - Tests for core logic are in `graphql-core/src/test/java/com/example/graphql/core`.
+  - All code is now under `com.dac.graphql.core`.
+  - Tests for core logic are in `graphql-core/src/test/java/com.dac/graphql/core`.
   - **Packaged as a regular JAR** (not a Spring Boot fat JAR) to avoid dependency issues.
 
 - **graphql-app**  
@@ -102,7 +102,7 @@ This structure ensures:
   - Adapter-specific tests can be added in their respective modules (none present yet, but structure supports it).
 
 - **Spring Boot Main Class**  
-  - Now in `graphql-core` as `com.example.graphql.core.GraphqlServerApplication`.
+  - Now in `graphql-core` as `com.dac.graphql.core.GraphqlServerApplication`.
 
 ---
 
