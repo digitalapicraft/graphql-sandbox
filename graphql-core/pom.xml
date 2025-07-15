@@ -48,6 +48,24 @@
                     <target>17</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-maven-plugin</artifactId>
+                <version>1.6.14</version>
+                <executions>
+                    <execution>
+                        <id>generate-openapi</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <outputFileName>openapi-admin.json</outputFileName>
+                            <outputDir>${project.build.directory}/openapi</outputDir>
+                            <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project> 

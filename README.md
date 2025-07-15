@@ -2,39 +2,40 @@
 
 **Project managed by Digital API Corp**
 
-This project is an open-source Spring Boot server that dynamically generates a GraphQL API and an SQLite database from an uploaded GraphQL schema. It allows you to upload a `.graphql` spec, automatically creates the corresponding database tables, and exposes a `/graphql` endpoint for queries and mutations.
+This project is an open-source Spring Boot server that dynamically generates a GraphQL API and an SQLite or PostgreSQL database from uploaded GraphQL schemas. It now supports **multiple schemas**, each identified by a name, and exposes dynamic endpoints for each schema.
 
 ## High-Level Flow
 
 ```mermaid
 sequenceDiagram
     participant User
-    participant REST_API as REST API (/api/upload-graphql-spec)
+    participant REST_API as REST API (/api/upload-graphql-spec/{specName})
     participant SchemaService
     participant SchemaRegistry
     participant SQLiteDB as SQLite DB
-    participant GraphQL_API as GraphQL API (/graphql)
+    participant GraphQL_API as GraphQL API (/graphql/{specName})
 
-    User->>REST_API: Upload GraphQL schema
+    User->>REST_API: Upload GraphQL schema (with name)
     REST_API->>SchemaService: processSchemaFile(schemaFile)
     SchemaService->>SQLiteDB: Create tables from schema
-    REST_API->>SchemaRegistry: setSchemaFile(schemaFile)
+    REST_API->>SchemaRegistry: setSchemaFile(specName, schemaFile)
     REST_API-->>User: Success response
 
-    User->>GraphQL_API: Query/Mutation request
-    GraphQL_API->>SchemaRegistry: getSchemaFile()
+    User->>GraphQL_API: Query/Mutation request (with specName)
+    GraphQL_API->>SchemaRegistry: getSchemaFile(specName)
     GraphQL_API->>SQLiteDB: Execute SQL (via resolvers)
     GraphQL_API-->>User: Query/Mutation result
 ```
 
 ## Features
-- Upload a GraphQL schema and auto-generate database tables
-- Dynamic GraphQL endpoint based on uploaded schema
-- Query and mutate data via GraphQL
-- REST API for schema upload
+- Upload multiple GraphQL schemas, each with a unique name
+- Dynamic GraphQL endpoints per schema: `/graphql/{specName}`
+- Query and mutate data via GraphQL for each schema
+- REST API for schema upload: `/api/upload-graphql-spec/{specName}`
 - Multi-module architecture with database adapters
 - Support for SQLite and PostgreSQL databases
-- Code coverage and CI via GitHub Actions
+- In-memory mapping of spec names to schema files for fast access
+- Integration and unit tests with Spring Boot and MockMvc
 
 ## Getting Started
 
@@ -75,20 +76,63 @@ The application supports multiple database backends:
    ./mvnw spring-boot:run -pl graphql-app
    ```
 
-### Usage
-1. **Upload a GraphQL schema:**
-   ```bash
-   curl -F "file=@/path/to/your/schema.graphql" http://localhost:8080/api/upload-graphql-spec
-   ```
-2. **Query the GraphQL endpoint:**
-   Send POST requests to `http://localhost:8080/graphql` with a JSON body:
-   ```json
-   { "query": "{ books { id title author } }" }
-   ```
+## Usage
+
+### 1. **Upload a GraphQL schema**
+
+```bash
+curl -F "file=@/path/to/your/employee.graphql" http://localhost:8080/api/upload-graphql-spec/employee
+curl -F "file=@/path/to/your/accounts.graphql" http://localhost:8080/api/upload-graphql-spec/accounts
+```
+
+### 2. **Query a specific schema**
+
+Send POST requests to the dynamic endpoint:
+
+```bash
+curl -X POST http://localhost:8080/graphql/employee \
+  -H 'Content-Type: application/json' \
+  -d '{"query": "{ employees { id name } }"}'
+
+curl -X POST http://localhost:8080/graphql/accounts \
+  -H 'Content-Type: application/json' \
+  -d '{"query": "{ accounts { id balance } }"}'
+```
+
+### 3. **Error Handling**
+- If you query or upload with a non-existent spec name, you will receive a 404 error.
+
+## Integration Testing
+
+Integration tests use Spring Boot's `@SpringBootTest` and `@AutoConfigureMockMvc` to test the full application context and HTTP endpoints. Tests:
+- Upload schemas via `/api/upload-graphql-spec/{specName}`
+- Query each schema via `/graphql/{specName}`
+- Verify correct data and error handling
+
+**Example (Java):**
+```java
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("sqlite")
+class GraphQLMultiSchemaIntegrationTest {
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void uploadAndQueryMultipleSchemas() throws Exception {
+        // Upload and query logic here (see codebase for details)
+    }
+}
+```
+
+**Best Practices:**
+- Use a test profile/database (e.g., SQLite)
+- Clean up uploaded files after tests
+- Test both success and error scenarios
 
 ## API Endpoints
-- `POST /api/upload-graphql-spec` — Upload a GraphQL schema file
-- `POST /graphql` — Execute GraphQL queries and mutations
+- `POST /api/upload-graphql-spec/{specName}` — Upload a GraphQL schema file for a given name
+- `POST /graphql/{specName}` — Execute GraphQL queries and mutations for a given schema
 
 ## Testing
 Run all tests and generate a code coverage report:

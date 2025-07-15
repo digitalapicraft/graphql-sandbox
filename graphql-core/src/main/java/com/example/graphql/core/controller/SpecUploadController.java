@@ -40,4 +40,19 @@ public class SpecUploadController {
         }
         return ResponseEntity.ok("Schema uploaded and database generated successfully: " + dest.getAbsolutePath());
     }
+
+    @GetMapping("/graphql-specs")
+    public ResponseEntity<?> listRegisteredSpecs() {
+        return ResponseEntity.ok(schemaRegistry.getAllSchemas().keySet());
+    }
+
+    @GetMapping("/graphql-specs/{specName}")
+    public ResponseEntity<?> getSpecFile(@PathVariable String specName) throws IOException {
+        if (!schemaRegistry.hasSchema(specName)) {
+            return ResponseEntity.status(404).body("Spec not found: " + specName);
+        }
+        File file = schemaRegistry.getSchemaFile(specName);
+        String content = java.nio.file.Files.readString(file.toPath());
+        return ResponseEntity.ok().header("Content-Type", "text/plain").body(content);
+    }
 } 
