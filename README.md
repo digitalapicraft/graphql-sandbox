@@ -247,3 +247,28 @@ docker-compose down -v
 - You can modify the `.env` file to change database credentials or ports as needed.
 - The database data is persisted in a Docker volume (`pgdata`).
 - For schema upload and GraphQL queries, use the same endpoints as described above. 
+
+## Restricting Swagger UI Access by URL and IP Address
+
+You can restrict access to the Swagger UI to specific URLs and IP addresses using configuration in `application.properties`:
+
+```
+# Comma-separated list of Swagger UI URLs to restrict (default: /swagger-ui/)
+app.swagger-ui.allowed-urls=/swagger-ui/
+# Comma-separated list of allowed IP addresses (default: empty means allow all)
+app.swagger-ui.allowed-ips=
+```
+
+- By default, all IP addresses are allowed (the property is empty).
+- To restrict access, set `app.swagger-ui.allowed-ips` to a comma-separated list of allowed IPs (e.g., `192.168.1.100,10.0.0.1`).
+- You can also change the URLs to protect by editing `app.swagger-ui.allowed-urls`.
+
+**Example:**
+```
+app.swagger-ui.allowed-urls=/swagger-ui/,/swagger-ui.html
+app.swagger-ui.allowed-ips=192.168.1.100,10.0.0.1
+```
+
+After updating the configuration, restart your application for changes to take effect.
+
+You will need to implement a filter or use Spring Security to enforce these restrictions in your application code. 

@@ -10,6 +10,12 @@
       "description": "Generated server url"
     }
   ],
+  "tags": [
+    {
+      "name": "Spec Upload",
+      "description": "Endpoints for uploading and managing GraphQL schema specifications."
+    }
+  ],
   "paths": {
     "/graphql/{specName}": {
       "post": {
@@ -57,9 +63,63 @@
     "/api/upload-graphql-spec/{specName}": {
       "post": {
         "tags": [
-          "spec-upload-controller"
+          "Spec Upload"
         ],
+        "summary": "Upload a GraphQL schema specification file",
+        "description": "Uploads a GraphQL schema file and generates the corresponding database schema.",
         "operationId": "uploadGraphqlSpec",
+        "parameters": [
+          {
+            "name": "specName",
+            "in": "path",
+            "description": "The name to register the uploaded schema under.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "string",
+                "description": "The GraphQL schema file to upload.",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Schema uploaded and database generated successfully.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Schema upload failed.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metrics/upload-graphql-spec/{specName}": {
+      "post": {
+        "tags": [
+          "metrics-controller"
+        ],
+        "operationId": "uploadGraphqlSpecWithMetrics",
         "parameters": [
           {
             "name": "specName",
@@ -105,7 +165,7 @@
     "/api/graphql-specs": {
       "get": {
         "tags": [
-          "spec-upload-controller"
+          "Spec Upload"
         ],
         "operationId": "listRegisteredSpecs",
         "responses": {
@@ -125,7 +185,7 @@
     "/api/graphql-specs/{specName}": {
       "get": {
         "tags": [
-          "spec-upload-controller"
+          "Spec Upload"
         ],
         "operationId": "getSpecFile",
         "parameters": [
