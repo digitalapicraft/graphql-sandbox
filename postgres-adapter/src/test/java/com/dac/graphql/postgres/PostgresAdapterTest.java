@@ -3,6 +3,7 @@ package com.dac.graphql.postgres;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import graphql.language.TypeName;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,11 +37,11 @@ class PostgresAdapterTest {
 
     @Test
     void testMapGraphQLTypeToSql() {
-        assertEquals("TEXT", adapter.mapGraphQLTypeToSql("String"));
-        assertEquals("INTEGER", adapter.mapGraphQLTypeToSql("Int"));
-        assertEquals("DOUBLE PRECISION", adapter.mapGraphQLTypeToSql("Float"));
-        assertEquals("BOOLEAN", adapter.mapGraphQLTypeToSql("Boolean"));
-        assertEquals("SERIAL PRIMARY KEY", adapter.mapGraphQLTypeToSql("ID"));
+        assertEquals("TEXT", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("String").build()));
+        assertEquals("INTEGER", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("Int").build()));
+        assertEquals("DOUBLE PRECISION", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("Float").build()));
+        assertEquals("BOOLEAN", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("Boolean").build()));
+        assertEquals("TEXT PRIMARY KEY", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("ID").build()));
     }
 
     @Test

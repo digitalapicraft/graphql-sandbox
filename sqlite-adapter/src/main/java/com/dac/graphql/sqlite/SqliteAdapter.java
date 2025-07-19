@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.*;
+import graphql.language.Type;
 
 @Component
 @Primary
@@ -98,8 +99,9 @@ public class SqliteAdapter implements DatabaseAdapter {
     }
 
     @Override
-    public String mapGraphQLTypeToSql(String graphQLType) {
-        switch (graphQLType.replace("!", "")) {
+    public String mapGraphQLTypeToSql(Type<?> graphQLType) {
+        String baseType = getBaseTypeName(graphQLType);
+        switch (baseType) {
             case "Int": return "INTEGER";
             case "Float": return "REAL";
             case "Boolean": return "BOOLEAN";

@@ -10,6 +10,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.sql.DataSource;
+import graphql.language.Type;
 
 @Component
 @Profile("postgres")
@@ -110,12 +111,13 @@ public class PostgresAdapter implements DatabaseAdapter {
     }
 
     @Override
-    public String mapGraphQLTypeToSql(String graphQLType) {
-        switch (graphQLType.replace("!", "")) {
+    public String mapGraphQLTypeToSql(Type<?> graphQLType) {
+        String baseType = getBaseTypeName(graphQLType);
+        switch (baseType) {
             case "Int": return "INTEGER";
             case "Float": return "DOUBLE PRECISION";
             case "Boolean": return "BOOLEAN";
-            case "ID": return "SERIAL PRIMARY KEY";
+            case "ID": return "TEXT PRIMARY KEY";
             case "String":
             default: return "TEXT";
         }

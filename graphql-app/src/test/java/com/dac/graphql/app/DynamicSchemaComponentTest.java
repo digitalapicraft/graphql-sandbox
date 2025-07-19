@@ -7,9 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.AfterEach;
+import java.nio.file.*;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -20,6 +22,11 @@ class DynamicSchemaComponentTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @AfterEach
+    void deleteDatabaseFile() throws Exception {
+        Files.deleteIfExists(Paths.get("database.db"));
+    }
 
     @Test
     void dynamicSchemaAndDataFetchers_workForCat() throws Exception {
@@ -47,7 +54,7 @@ class DynamicSchemaComponentTest {
         mockMvc.perform(multipart("/api/upload-graphql-spec/cat")
                 .file(schemaFile))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Schema uploaded and database generated successfully")));
+                .andExpect(content().string(containsString("Schema uploaded and database generated successfully")));
 
         // Now test that the dynamic schema works for the Cat type
         String query = """
@@ -67,5 +74,50 @@ class DynamicSchemaComponentTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data").exists())
                 .andExpect(jsonPath("$.data.cats").isArray());
+    }
+
+    @Test
+    void primaryKeyConstraint_preventsDuplicateIds() throws Exception {
+        // Upload schema with Bike type
+        String schemaContent = """
+            type Bike {
+              id: ID!
+              model: String!
+            }
+            type Mutation {
+              addBike(id: ID!, model: String!): Bike
+            }
+            type Query {
+              bikes: [Bike!]!
+            }
+            """;
+
+        MockMultipartFile schemaFile = new MockMultipartFile(
+            "file",
+            "bike-schema.graphql",
+            "text/plain",
+            schemaContent.getBytes()
+        );
+
+        mockMvc.perform(multipart("/api/upload-graphql-spec/bike")
+                .file(schemaFile))
+                .andExpect(status().isOk());
+
+        // Insert a bike with id "1"
+        String mutation = "mutation { addBike(id: \"1\", model: \"A\") { id model } }";
+        String json = "{\"query\":\"" + mutation.replace("\"", "\\\"") + "\"}";
+        mockMvc.perform(post("/graphql/bike")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.addBike.id").value("1"));
+
+        // Attempt to insert another bike with the same id "1"
+        mockMvc.perform(post("/graphql/bike")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.errors").exists())
+                .andExpect(jsonPath("$.errors[0].message", containsString("UNIQUE constraint failed")));
     }
 } 
