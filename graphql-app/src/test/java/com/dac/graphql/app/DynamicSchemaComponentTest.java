@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.AfterEach;
 import java.nio.file.*;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -53,7 +54,7 @@ class DynamicSchemaComponentTest {
         mockMvc.perform(multipart("/api/upload-graphql-spec/cat")
                 .file(schemaFile))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Schema uploaded and database generated successfully")));
+                .andExpect(content().string(containsString("Schema uploaded and database generated successfully")));
 
         // Now test that the dynamic schema works for the Cat type
         String query = """
@@ -116,6 +117,7 @@ class DynamicSchemaComponentTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.errors").exists());
+                .andExpect(jsonPath("$.errors").exists())
+                .andExpect(jsonPath("$.errors[0].message", containsString("UNIQUE constraint failed")));
     }
 } 
