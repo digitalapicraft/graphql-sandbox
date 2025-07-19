@@ -1,5 +1,6 @@
 package com.dac.graphql.core.service;
 
+import graphql.language.Type;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class SchemaServiceTest {
                 assertTrue(columns.contains("title"));
                 assertTrue(columns.contains("author"));
             }
-            @Override public String mapGraphQLTypeToSql(String graphQLType) { return "TEXT"; }
+            @Override public String mapGraphQLTypeToSql(Type<?> graphQLType) { return "TEXT"; }
             @Override public String getDatabaseType() { return "test"; }
         });
     }

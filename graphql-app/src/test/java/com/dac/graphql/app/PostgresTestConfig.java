@@ -1,6 +1,7 @@
 package com.dac.graphql.app;
 
 import com.dac.graphql.core.adapter.DatabaseAdapter;
+import graphql.language.Type;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -28,7 +29,7 @@ public class PostgresTestConfig {
             @Override
             public void createTable(String tableName, String columns) throws SQLException {}
             @Override
-            public String mapGraphQLTypeToSql(String graphQLType) { return "text"; }
+            public String mapGraphQLTypeToSql(Type<?> graphQLType) { return "text"; }
             @Override
             public String getDatabaseType() { return "postgres"; }
         };

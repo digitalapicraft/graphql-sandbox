@@ -1,5 +1,7 @@
 package com.dac.graphql.core.adapter;
 
+import graphql.language.Type;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -64,7 +66,7 @@ public interface DatabaseAdapter {
      * @param graphQLType the GraphQL type string
      * @return database-specific SQL type string
      */
-    String mapGraphQLTypeToSql(String graphQLType);
+    String mapGraphQLTypeToSql(Type<?> graphQLType);
     
     /**
      * Get the database type identifier.
@@ -72,4 +74,15 @@ public interface DatabaseAdapter {
      * @return database type (e.g., "sqlite", "postgres")
      */
     String getDatabaseType();
+
+    default String getBaseTypeName(graphql.language.Type<?> type) {
+        if (type instanceof graphql.language.TypeName) {
+            return ((graphql.language.TypeName) type).getName();
+        } else if (type instanceof graphql.language.ListType) {
+            return getBaseTypeName(((graphql.language.ListType) type).getType());
+        } else if (type instanceof graphql.language.NonNullType) {
+            return getBaseTypeName(((graphql.language.NonNullType) type).getType());
+        }
+        return type.toString(); // fallback
+    }
 } 
