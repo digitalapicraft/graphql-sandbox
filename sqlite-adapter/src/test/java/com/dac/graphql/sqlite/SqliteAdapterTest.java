@@ -3,6 +3,7 @@ package com.dac.graphql.sqlite;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import graphql.language.TypeName;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,12 +32,12 @@ class SqliteAdapterTest {
 
     @Test
     void testMapGraphQLTypeToSql() {
-        assertEquals("INTEGER", adapter.mapGraphQLTypeToSql("Int"));
-        assertEquals("REAL", adapter.mapGraphQLTypeToSql("Float"));
-        assertEquals("BOOLEAN", adapter.mapGraphQLTypeToSql("Boolean"));
-        assertEquals("TEXT PRIMARY KEY", adapter.mapGraphQLTypeToSql("ID"));
-        assertEquals("TEXT", adapter.mapGraphQLTypeToSql("String"));
-        assertEquals("TEXT", adapter.mapGraphQLTypeToSql("CustomType"));
+        assertEquals("INTEGER", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("Int").build()));
+        assertEquals("REAL", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("Float").build()));
+        assertEquals("BOOLEAN", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("Boolean").build()));
+        assertEquals("TEXT PRIMARY KEY", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("ID").build()));
+        assertEquals("TEXT", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("String").build()));
+        assertEquals("TEXT", adapter.mapGraphQLTypeToSql(TypeName.newTypeName("CustomType").build()));
     }
 
     @Test

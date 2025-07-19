@@ -29,7 +29,7 @@ public class SchemaService {
         for (ObjectTypeDefinition type : types) {
             if (type.getName().equals("Query") || type.getName().equals("Mutation")) continue;
             String columns = type.getFieldDefinitions().stream()
-                    .map(field -> field.getName() + " " + databaseAdapter.mapGraphQLTypeToSql(field.getType().toString()))
+                    .map(field -> field.getName() + " " + databaseAdapter.mapGraphQLTypeToSql(field.getType()))
                     .collect(Collectors.joining(", "));
             databaseAdapter.createTable(type.getName(), columns);
         }

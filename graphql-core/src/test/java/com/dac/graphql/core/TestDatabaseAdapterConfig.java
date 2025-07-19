@@ -1,6 +1,7 @@
 package com.dac.graphql.core;
 
 import com.dac.graphql.core.adapter.DatabaseAdapter;
+import graphql.language.Type;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -26,7 +27,7 @@ public class TestDatabaseAdapterConfig {
             @Override
             public void createTable(String tableName, String columns) { }
             @Override
-            public String mapGraphQLTypeToSql(String graphQLType) { return "TEXT"; }
+            public String mapGraphQLTypeToSql(Type<?> graphQLType) { return "TEXT"; }
             @Override
             public String getDatabaseType() { return "test"; }
         };
